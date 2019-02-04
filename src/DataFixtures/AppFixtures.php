@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Entry;
 use App\Entity\User;
+use App\Security\TokenGenerator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -21,10 +22,75 @@ class AppFixtures extends Fixture
      */
     private $faker;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
+    /**
+     * @var TokenGenerator
+     */
+    private $tokenGenerator;
+
+    private const USERS = [
+        [
+            'bio' => 'Hey it is admin.',
+            'name' => 'Admin User',
+            'email' => 'admin@versus.com',
+            'username' => 'admin',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_SUPERADMIN],
+            'enabled' => true
+        ],
+        [
+            'bio' => 'Hey it is JT.',
+            'name' => 'JT Smrdel',
+            'email' => 'jtsmrdel@gmail.com',
+            'username' => 'jtsmrd',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_USER],
+            'enabled' => false
+        ],
+        [
+            'bio' => 'Hey it is Taylor',
+            'name' => 'Taylor Smrdel',
+            'email' => 'taylor@versus.com',
+            'username' => 'taylorSmrdel',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_USER],
+            'enabled' => true
+        ],
+        [
+            'bio' => 'Hey it is Shane.',
+            'name' => 'Shane Krznaric',
+            'email' => 'shanecool@hotmail.com',
+            'username' => 'shanecool',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_USER],
+            'enabled' => true
+        ],
+        [
+            'bio' => 'Hey it is Bryan.',
+            'name' => 'Bryan Scagline',
+            'email' => 'bscaggs@gmail.com',
+            'username' => 'bscaggs',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_USER],
+            'enabled' => true
+        ],
+        [
+            'bio' => 'Hey it is Adam.',
+            'name' => 'Adam Marks',
+            'email' => 'marks02@gmail.com',
+            'username' => 'marks02',
+            'password' => 'Passw0rd',
+            'roles' => [User::ROLE_USER],
+            'enabled' => true
+        ],
+    ];
+
+    public function __construct(
+        UserPasswordEncoderInterface $passwordEncoder,
+        TokenGenerator $tokenGenerator
+    ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->faker = \Faker\Factory::create();
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     /**
@@ -49,7 +115,10 @@ class AppFixtures extends Fixture
             $entry->setFeatured(false);
             $entry->setMediaId($this->faker->uuid);
             $entry->setRankId(rand(1, 5));
-            $entry->setUser($this->getReference("user_$i"));
+
+            $userReference = $this->getRandomUserReference();
+
+            $entry->setUser($userReference);
 
             $manager->persist($entry);
         }
@@ -59,29 +128,43 @@ class AppFixtures extends Fixture
 
     public function loadUsers(ObjectManager $manager)
     {
-        for ($i = 0; $i < 100; $i++) {
+        foreach (self::USERS as $userFixture) {
             $user = new User();
-            $user->setBio($this->faker->realText(100));
-            $user->setConfirmationToken($this->faker->uuid);
+            $user->setBio($userFixture['bio']);
             $user->setCreateDate($this->faker->dateTimeThisYear);
-            $user->setName($this->faker->name);
-            $user->setEmail($this->faker->email);
-            $user->setEnabled(true);
+            $user->setName($userFixture['name']);
+            $user->setEmail($userFixture['email']);
             $user->setFeatured(false);
             $user->setRankId(rand(1, 5));
-            $user->setUpdateDate($this->faker->dateTimeThisYear);
-            $user->setUsername($this->faker->userName);
+            $user->setUsername($userFixture['username']);
+            $user->setRoles($userFixture['roles']);
 
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
-                'Passw0rd'
+                $userFixture['password']
             ));
 
-            $this->setReference("user_$i", $user);
+            $user->setEnabled($userFixture['enabled']);
+
+            if (!$userFixture['enabled']) {
+                $user->setConfirmationToken(
+                    $this->tokenGenerator->getRandomSecureToken()
+                );
+            }
+
+            $this->addReference('user_' . $userFixture['username'], $user);
 
             $manager->persist($user);
         }
 
         $manager->flush();
+    }
+
+    /**
+     * @return User
+     */
+    private function getRandomUserReference(): User
+    {
+        return $this->getReference('user_' . self::USERS[rand(0, 5)]['username']);
     }
 }

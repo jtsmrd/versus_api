@@ -2,32 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: jtsmrdel
- * Date: 2019-02-02
- * Time: 18:44
+ * Date: 2019-02-03
+ * Time: 10:55
  */
 
 namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Entity\User;
+use App\Entity\CreateDateEntityInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class PasswordHashSubscriber implements EventSubscriberInterface
+class CreateDateEntitySubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -49,22 +38,19 @@ class PasswordHashSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['hashPassword', EventPriorities::PRE_WRITE]
+            KernelEvents::VIEW => ['setCreateDate', EventPriorities::PRE_WRITE]
         ];
     }
 
-    public function hashPassword(GetResponseForControllerResultEvent $event)
+    public function setCreateDate(GetResponseForControllerResultEvent $event)
     {
-        $user = $event->getControllerResult();
+        $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$user instanceof User || Request::METHOD_POST !== $method) {
+        if (!$entity instanceof CreateDateEntityInterface || Request::METHOD_POST !== $method) {
             return;
         }
 
-        // It's a User, hash the password
-        $user->setPassword(
-            $this->passwordEncoder->encodePassword($user, $user->getPassword())
-        );
+        $entity->setCreateDate(new \DateTime());
     }
 }

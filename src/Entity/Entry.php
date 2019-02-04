@@ -4,69 +4,100 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     itemOperations={"get"},
- *     collectionOperations={"get"}
+ *     itemOperations={
+ *          "get",
+ *          "put"={
+ *              "access_control"="is_granted('ROLE_USER') and object.getUser() == user"
+ *          }
+ *      },
+ *     collectionOperations={
+ *          "get",
+ *          "post"={
+ *              "access_control"="is_granted('ROLE_USER')"
+ *          },
+ *          "api_users_entries_get_subresource"={
+ *              "normalization_context"={
+ *                  "groups"={"get"}
+ *              }
+ *          }
+ *      },
+ *     denormalizationContext={
+ *          "groups"={"post"}
+ *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\EntryRepository")
  */
-class Entry
+class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"post", "get"})
+     * @Assert\Length(max="100")
      */
     private $caption;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"post", "get"})
      * @Assert\NotBlank()
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"post", "get"})
      * @Assert\NotBlank()
      */
     private $typeId;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $createDate;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"post"})
      */
     private $featured;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\DateTime()
      */
     private $matchDate;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"post", "get"})
      * @Assert\NotBlank()
      */
     private $mediaId;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"post"})
      */
     private $rankId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\DateTime()
      */
     private $updateDate;
 
@@ -122,7 +153,7 @@ class Entry
         return $this->createDate;
     }
 
-    public function setCreateDate(\DateTimeInterface $createDate): self
+    public function setCreateDate(\DateTimeInterface $createDate): CreateDateEntityInterface
     {
         $this->createDate = $createDate;
 
@@ -198,10 +229,10 @@ class Entry
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      * @return Entry
      */
-    public function setUser(User $user): self
+    public function setUser(UserInterface $user): UserCreatedEntityInterface
     {
         $this->user = $user;
 
