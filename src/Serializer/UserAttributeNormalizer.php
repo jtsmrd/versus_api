@@ -9,6 +9,7 @@
 namespace App\Serializer;
 
 use App\Entity\User;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Exception\CircularReferenceException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -29,9 +30,17 @@ class UserAttributeNormalizer implements ContextAwareNormalizerInterface, Serial
      */
     private $tokenStorage;
 
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        LoggerInterface $logger
+    ) {
         $this->tokenStorage = $tokenStorage;
+        $this->logger = $logger;
     }
 
     /**
@@ -70,12 +79,15 @@ class UserAttributeNormalizer implements ContextAwareNormalizerInterface, Serial
         if ($this->isUserHimself($object)) {
             $context['groups'][] = 'get-owner';
         }
+        else {
+            $context['groups'][] = 'get';
+        }
 
         // Continue serialization
         return $this->passOn($object, $format, $context);
     }
 
-    private function isUserHimself($object)
+    private function isUserHimself(User $object)
     {
         return $object->getUsername() === $this->tokenStorage->getToken()->getUsername();
     }

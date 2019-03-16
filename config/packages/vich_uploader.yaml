@@ -1,0 +1,16 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        profile_images:
+            uri_prefix: /profile_images
+            upload_destination: '%kernel.project_dir%/public/profile_images'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        background_images:
+            uri_prefix: /background_images
+            upload_destination: '%kernel.project_dir%/public/background_images'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        entry_images:
+            uri_prefix: /entry_images
+            upload_destination: '%kernel.project_dir%/public/entry_images'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer

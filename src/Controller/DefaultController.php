@@ -8,9 +8,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Security\UserConfirmationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,6 +34,7 @@ class DefaultController extends AbstractController
      * @param string $token
      * @param UserConfirmationService $userConfirmationService
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \App\Exception\InvalidConfirmationTokenException
      */
     public function confirmUser(
         string $token,
@@ -41,5 +43,18 @@ class DefaultController extends AbstractController
         $userConfirmationService->confirmUser($token);
 
         return $this->redirectToRoute('default_index');
+    }
+
+    /**
+     * @Route("/username_available/{username}", name="username_available")
+     * @param string $username
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function usernameExists($username)
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $user = $repository->findOneBy(['username' => $username]);
+        $exists = $user === null;
+        return $this->json(["available" => $exists], Response::HTTP_OK);
     }
 }

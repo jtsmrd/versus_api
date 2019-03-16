@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *     attributes={"order"={"createDate": "DESC"}},
  *     itemOperations={
  *          "get",
  *          "put"={
@@ -33,46 +34,46 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="App\Repository\EntryRepository")
  */
-class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface
+class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, UpdateDateEntityInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get"})
+     * @Groups({"get", "get-owner"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"post", "get"})
+     * @Groups({"post", "get", "get-owner"})
      * @Assert\Length(max="100")
      */
     private $caption;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get"})
+     * @Groups({"post", "get", "get-owner"})
      * @Assert\NotBlank()
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get"})
+     * @Groups({"post", "get", "get-owner"})
      * @Assert\NotBlank()
      */
     private $typeId;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
+     * @Groups({"get", "get-owner"})
      */
     private $createDate;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"post"})
+     * @Groups({"post", "get", "get-owner"})
      */
     private $featured;
 
@@ -84,14 +85,14 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"post", "get"})
+     * @Groups({"post", "get", "get-owner"})
      * @Assert\NotBlank()
      */
     private $mediaId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post"})
+     * @Groups({"post", "get", "get-owner"})
      */
     private $rankId;
 
@@ -213,7 +214,7 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface
         return $this->updateDate;
     }
 
-    public function setUpdateDate(?\DateTimeInterface $updateDate): self
+    public function setUpdateDate(\DateTimeInterface $updateDate): CreateDateEntityInterface
     {
         $this->updateDate = $updateDate;
 
@@ -237,5 +238,10 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface
         $this->user = $user;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return "";
     }
 }

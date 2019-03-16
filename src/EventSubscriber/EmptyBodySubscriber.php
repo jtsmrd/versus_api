@@ -2,34 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: jtsmrdel
- * Date: 2019-02-03
- * Time: 10:55
+ * Date: 2019-02-16
+ * Time: 18:42
  */
 
 namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Entity\Entry;
-use App\Entity\UserCreatedEntityInterface;
+use App\Exception\EmptyBodyException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserCreatedEntitySubscriber implements EventSubscriberInterface
+class EmptyBodySubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
-        $this->tokenStorage = $tokenStorage;
-    }
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -51,22 +38,22 @@ class UserCreatedEntitySubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['getAuthenticatedUser', EventPriorities::PRE_WRITE]
+            KernelEvents::REQUEST => ['handleEmptyBody', EventPriorities::POST_DESERIALIZE]
         ];
     }
 
-    public function getAuthenticatedUser(GetResponseForControllerResultEvent $event)
+    public function handleEmptyBody(GetResponseEvent $event)
     {
-        $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$entity instanceof UserCreatedEntityInterface || Request::METHOD_POST !== $method) {
+        if (!in_array($method, [Request::METHOD_POST, Request::METHOD_PUT, Request::METHOD_PATCH])) {
             return;
         }
 
-        /** @var UserInterface $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $data = $event->getRequest()->get('data');
 
-        $entity->setUser($user);
+        if (null === $data) {
+            throw new EmptyBodyException();
+        }
     }
 }

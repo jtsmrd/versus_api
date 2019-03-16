@@ -40,8 +40,8 @@ class AppFixtures extends Fixture
         [
             'bio' => 'Hey it is JT.',
             'name' => 'JT Smrdel',
-            'email' => 'jtsmrdel@gmail.com',
-            'username' => 'jtsmrd',
+            'email' => 'smrd813@aol.com',
+            'username' => 'smrd813',
             'password' => 'Passw0rd',
             'roles' => [User::ROLE_USER],
             'enabled' => false

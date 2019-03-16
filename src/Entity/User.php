@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,9 +14,18 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\ResetPasswordAction;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "name": "partial",
+ *          "username": "partial"
+ *     }
+ * )
  * @ApiResource(
+ *     attributes={"order"={"name": "ASC"}},
  *     itemOperations={
  *          "get"={
  *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')",
@@ -39,7 +49,8 @@ use App\Controller\ResetPasswordAction;
  *              "controller"=ResetPasswordAction::class,
  *              "denormalization_context"={
  *                  "groups"={"put-reset-password"}
- *              }
+ *              },
+ *              "validation_groups"={"put-reset-password"}
  *          }
  *      },
  *     collectionOperations={
@@ -54,7 +65,8 @@ use App\Controller\ResetPasswordAction;
  *              },
  *              "normalization_context"={
  *                  "groups"={"get"}
- *              }
+ *              },
+ *              "validation_groups"={"post"}
  *          }
  *      }
  * )
@@ -62,8 +74,9 @@ use App\Controller\ResetPasswordAction;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User implements UserInterface, CreateDateEntityInterface
+class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntityInterface
 {
+    const DEFAULT_ENABLED = false;
     const DEFAULT_FEATURED = false;
     const DEFAULT_RANK_ID = 1;
 
@@ -77,13 +90,13 @@ class User implements UserInterface, CreateDateEntityInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get"})
+     * @Groups({"get", "get-owner"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"get", "post", "put"})
+     * @Groups({"get", "post", "put", "get-owner"})
      */
     private $bio;
 
@@ -95,14 +108,13 @@ class User implements UserInterface, CreateDateEntityInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get-admin"})
-     * @Assert\DateTime()
+     * @Groups({"get-admin", "get-owner"})
      */
     private $createDate;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "put"})
+     * @Groups({"get", "post", "put", "get-owner"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post", "put"})
      */
@@ -119,13 +131,13 @@ class User implements UserInterface, CreateDateEntityInterface
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get-admin"})
+     * @Groups({"get-admin", "get-owner"})
      */
     private $enabled;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get"})
+     * @Groups({"get", "get-owner"})
      */
     private $featured;
 
@@ -188,7 +200,7 @@ class User implements UserInterface, CreateDateEntityInterface
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get"})
+     * @Groups({"get", "get-owner"})
      */
     private $rankId;
 
@@ -201,7 +213,7 @@ class User implements UserInterface, CreateDateEntityInterface
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post"})
+     * @Groups({"get", "post", "get-owner"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post"})
      */
@@ -209,6 +221,7 @@ class User implements UserInterface, CreateDateEntityInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Entry", mappedBy="user")
+     * @Groups({"get-owner"})
      * @ApiSubresource()
      */
     private $entries;
@@ -219,14 +232,25 @@ class User implements UserInterface, CreateDateEntityInterface
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     * @Groups({"get", "put", "get-owner"})
+     */
+    private $profileImage;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     * @Groups({"get", "put", "get-owner"})
+     */
+    private $backgroundImage;
+
+
     public function __construct()
     {
-        $this->featured = self::DEFAULT_FEATURED;
-        $this->rankId = self::DEFAULT_RANK_ID;
         $this->entries = new ArrayCollection();
         $this->roles = self::DEFAULT_ROLES;
-        $this->enabled = false;
-        $this->confirmationToken = null;
+        $this->enabled = self::DEFAULT_ENABLED;
+        $this->featured = self::DEFAULT_FEATURED;
     }
 
     public function getId(): ?int
@@ -306,7 +330,7 @@ class User implements UserInterface, CreateDateEntityInterface
         return $this;
     }
 
-    public function getFeatured(): ?bool
+    public function getFeatured(): bool
     {
         return $this->featured;
     }
@@ -395,7 +419,7 @@ class User implements UserInterface, CreateDateEntityInterface
         return $this->updateDate;
     }
 
-    public function setUpdateDate(\DateTimeInterface $updateDate): self
+    public function setUpdateDate(\DateTimeInterface $updateDate): CreateDateEntityInterface
     {
         $this->updateDate = $updateDate;
 
@@ -430,6 +454,38 @@ class User implements UserInterface, CreateDateEntityInterface
     public function setRoles(array $roles)
     {
         $this->roles = $roles;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfileImage()
+    {
+        return $this->profileImage;
+    }
+
+    /**
+     * @param mixed $profileImage
+     */
+    public function setProfileImage($profileImage): void
+    {
+        $this->profileImage = $profileImage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBackgroundImage()
+    {
+        return $this->backgroundImage;
+    }
+
+    /**
+     * @param mixed $backgroundImage
+     */
+    public function setBackgroundImage($backgroundImage): void
+    {
+        $this->backgroundImage = $backgroundImage;
     }
 
     /**
