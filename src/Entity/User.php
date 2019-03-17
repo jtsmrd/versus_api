@@ -20,8 +20,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
- *          "name": "partial",
- *          "username": "partial"
+ *          "name": "start",
+ *          "username": "start"
  *     }
  * )
  * @ApiResource(
