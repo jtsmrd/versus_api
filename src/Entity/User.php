@@ -90,13 +90,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get", "get-owner", "followers", "followed-users"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"get", "post", "put", "get-owner"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users"})
      */
     private $bio;
 
@@ -114,7 +114,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "put", "get-owner"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post", "put"})
      */
@@ -137,7 +137,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get", "get-owner", "followers", "followed-users"})
      */
     private $featured;
 
@@ -200,20 +200,20 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get", "get-owner", "followers", "followed-users"})
      */
     private $rankId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get"})
+     * @Groups({"get", "followers", "followed-users"})
      * @Assert\DateTime()
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "get-owner"})
+     * @Groups({"get", "post", "get-owner", "followers", "followed-users"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post"})
      */
@@ -234,20 +234,45 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users"})
      */
     private $profileImage;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users"})
      */
     private $backgroundImage;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Follower", mappedBy="follower")
+     * @ApiSubresource()
+     */
+    private $followedUsers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Follower", mappedBy="followedUser")
+     * @ApiSubresource()
+     */
+    private $followers;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     */
+    private $followedUserCount;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     */
+    private $followerCount;
 
     public function __construct()
     {
         $this->entries = new ArrayCollection();
+        $this->followedUsers = new ArrayCollection();
+        $this->followers = new ArrayCollection();
         $this->roles = self::DEFAULT_ROLES;
         $this->enabled = self::DEFAULT_ENABLED;
         $this->featured = self::DEFAULT_FEATURED;
@@ -486,6 +511,54 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
     public function setBackgroundImage($backgroundImage): void
     {
         $this->backgroundImage = $backgroundImage;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowedUsers(): Collection
+    {
+        return $this->followedUsers;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFollowedUserCount()
+    {
+        return $this->followedUserCount;
+    }
+
+    /**
+     * @param mixed $followedUserCount
+     */
+    public function setFollowedUserCount($followedUserCount): void
+    {
+        $this->followedUserCount = $followedUserCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFollowerCount()
+    {
+        return $this->followerCount;
+    }
+
+    /**
+     * @param mixed $followerCount
+     */
+    public function setFollowerCount($followerCount): void
+    {
+        $this->followerCount = $followerCount;
     }
 
     /**
