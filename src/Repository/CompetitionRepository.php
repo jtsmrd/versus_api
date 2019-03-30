@@ -19,22 +19,22 @@ class CompetitionRepository extends ServiceEntityRepository
         parent::__construct($registry, Competition::class);
     }
 
-    // /**
-    //  * @return Competition[] Returns an array of Competition objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    /**
+     * @param $followedUserIds
+     * @return Competition[] Returns an array of Competition objects
+     */
+//    public function findByFollowedUserIds($followedUserIds)
+//    {
+//        return $this->createQueryBuilder('c')
+//            ->andWhere('c.users IN (:ids)')
+//            ->setParameter('ids', $followedUserIds)
+//            ->andWhere('c.active = 1')
+//            ->orderBy('c.startDate', 'DESC')
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
 
     /*
     public function findOneBySomeField($value): ?Competition

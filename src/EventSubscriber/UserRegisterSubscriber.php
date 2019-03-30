@@ -80,10 +80,6 @@ class UserRegisterSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $user->setFeatured(User::DEFAULT_FEATURED);
-        $user->setRankId(User::DEFAULT_RANK_ID);
-        $user->setEnabled(false);
-
         // It's a User, hash the password
         $user->setPassword(
             $this->passwordEncoder->encodePassword($user, $user->getPassword())

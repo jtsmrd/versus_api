@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "matched": "exact"
+ *     }
+ * )
  * @ApiResource(
  *     attributes={"order"={"createDate": "DESC"}},
  *     itemOperations={
@@ -40,27 +48,27 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get", "get-owner", "get-user-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
      * @Assert\Length(max="100")
      */
     private $caption;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $typeId;
@@ -79,13 +87,14 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"get", "get-owner"})
      * @Assert\DateTime()
      */
     private $matchDate;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $mediaId;
@@ -105,8 +114,20 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="entries")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-user-competitions"})
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"get", "get-owner"})
+     */
+    private $matched;
+
+    public function __construct()
+    {
+        $this->matched = false;
+    }
 
     public function getId(): ?int
     {
@@ -243,5 +264,17 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     public function __toString()
     {
         return "";
+    }
+
+    public function getMatched(): ?bool
+    {
+        return $this->matched;
+    }
+
+    public function setMatched(bool $matched): self
+    {
+        $this->matched = $matched;
+
+        return $this;
     }
 }

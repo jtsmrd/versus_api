@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
@@ -76,10 +77,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  */
 class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntityInterface
 {
-    const DEFAULT_ENABLED = false;
-    const DEFAULT_FEATURED = false;
-    const DEFAULT_RANK_ID = 1;
-
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_SUPERADMIN = 'ROLE_SUPERADMIN';
     const ROLE_USER = 'ROLE_USER';
@@ -90,13 +87,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $bio;
 
@@ -114,7 +111,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-user-competitions"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post", "put"})
      */
@@ -137,7 +134,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $featured;
 
@@ -200,20 +197,20 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $rankId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get", "followers", "followed-users"})
+     * @Groups({"get", "followers", "followed-users", "get-user-competitions"})
      * @Assert\DateTime()
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "post", "get-owner", "followers", "followed-users", "get-user-competitions"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post"})
      */
@@ -221,7 +218,6 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Entry", mappedBy="user")
-     * @Groups({"get-owner"})
      * @ApiSubresource()
      */
     private $entries;
@@ -234,13 +230,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $profileImage;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $backgroundImage;
 
@@ -258,24 +254,34 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $followedUserCount;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions"})
      */
     private $followerCount;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Competition", mappedBy="users", cascade={"persist"})
+     * @ApiSubresource()
+     */
+    private $competitions;
 
     public function __construct()
     {
         $this->entries = new ArrayCollection();
         $this->followedUsers = new ArrayCollection();
         $this->followers = new ArrayCollection();
+        $this->competitions = new ArrayCollection();
         $this->roles = self::DEFAULT_ROLES;
-        $this->enabled = self::DEFAULT_ENABLED;
-        $this->featured = self::DEFAULT_FEATURED;
+        $this->enabled = false;
+        $this->featured = false;
+        $this->rankId = 1;
+        $this->followedUserCount = 0;
+        $this->followerCount = 0;
     }
 
     public function getId(): ?int
@@ -582,5 +588,31 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
     public function eraseCredentials()
     {
 
+    }
+
+    /**
+     * @return Collection|Competition[]
+     */
+    public function getCompetitions(): Collection
+    {
+        return $this->competitions;
+    }
+
+    public function addCompetition(Competition $competition): self
+    {
+        if (!$this->competitions->contains($competition)) {
+            $this->competitions[] = $competition;
+        }
+
+        return $this;
+    }
+
+    public function removeCompetition(Competition $competition): self
+    {
+        if ($this->competitions->contains($competition)) {
+            $this->competitions->removeElement($competition);
+        }
+
+        return $this;
     }
 }

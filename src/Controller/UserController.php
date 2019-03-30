@@ -8,12 +8,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Competition;
 use App\Entity\Follower;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class UserController
@@ -21,8 +27,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
-
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     /**
      * @Route("/api/users/username/{username}", name="user_get_with_username", requirements={"id"="\w+"})
@@ -54,6 +67,57 @@ class UserController extends AbstractController
 
         return $this->json(
             ["followedUserIds" => $followedUserIds]
+        );
+    }
+
+    /**
+     * @Route("/api/users/{userId}/followed_user_competitions", name="get_followed_user_competitions", methods={"GET"})
+     * @param $userId
+     * @return mixed
+     */
+    public function getFollowedUserCompetitions($userId)
+    {
+        $repository = $this->getDoctrine()->getRepository(Follower::class);
+        $followerRecords = $repository->findBy(['follower' => $userId]);
+
+        $followedUserIds = array_map(
+            function (Follower $item) {
+                return $item->getFollowedUser()->getId();
+            },
+            $followerRecords
+        );
+
+        $conn = $this->entityManager->getConnection();
+
+        $sql = '
+          SELECT c.id
+          FROM competition c
+          JOIN competition_user cu on c.id = cu.competition_id
+          WHERE cu.user_id IN (' . implode( ", ", $followedUserIds) . ')
+          AND c.active = 1
+          ORDER BY c.start_date DESC
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $competitionResults = $stmt->fetchAll();
+
+        $compIds = array_map(
+            function ($item) {
+                return $item['id'];
+            },
+            $competitionResults
+        );
+
+        $compRepository = $this->getDoctrine()->getRepository(Competition::class);
+        $compRecords = $compRepository->findBy(['id' => $compIds]);
+
+        return $this->json(
+            $compRecords,
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['get-user-competitions']]
         );
     }
 
