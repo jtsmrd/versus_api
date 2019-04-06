@@ -116,7 +116,7 @@ class AppFixtures extends Fixture
     {
        $this->loadUsers($manager);
        $this->loadEntries($manager);
-       $this->loadCompetitions($manager);
+//       $this->loadCompetitions($manager);
     }
 
     public function loadEntries(ObjectManager $manager)
