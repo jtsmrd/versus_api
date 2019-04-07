@@ -127,9 +127,10 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     private $matched;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="entry", orphanRemoval=true)
+     * @ORM\Column(type="integer")
+     * @Groups({"get", "get-user-competitions"})
      */
-    private $votes;
+    private $voteCount;
 
     public function __construct()
     {
@@ -286,34 +287,13 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
         return $this;
     }
 
-    /**
-     * @return Collection|Vote[]
-     */
-    public function getVotes(): Collection
+    public function getVoteCount()
     {
-        return $this->votes;
+        return $this->voteCount;
     }
 
-    public function addVote(Vote $vote): self
+    public function setVoteCount($voteCount): void
     {
-        if (!$this->votes->contains($vote)) {
-            $this->votes[] = $vote;
-            $vote->setEntry($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVote(Vote $vote): self
-    {
-        if ($this->votes->contains($vote)) {
-            $this->votes->removeElement($vote);
-            // set the owning side to null (unless already changed)
-            if ($vote->getEntry() === $this) {
-                $vote->setEntry(null);
-            }
-        }
-
-        return $this;
+        $this->voteCount = $voteCount;
     }
 }
