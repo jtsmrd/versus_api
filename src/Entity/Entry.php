@@ -132,6 +132,11 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
      */
     private $voteCount;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="entry")
+     */
+    private $votes;
+
     public function __construct()
     {
         $this->matched = false;
@@ -251,18 +256,11 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param UserInterface $user
-     * @return Entry
-     */
     public function setUser(UserInterface $user): UserCreatedEntityInterface
     {
         $this->user = $user;
@@ -295,5 +293,36 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     public function setVoteCount($voteCount): void
     {
         $this->voteCount = $voteCount;
+    }
+
+    /**
+     * @return Collection|Vote[]
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+            $vote->setEntry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): self
+    {
+        if ($this->votes->contains($vote)) {
+            $this->votes->removeElement($vote);
+            // set the owning side to null (unless already changed)
+            if ($vote->getEntry() === $this) {
+                $vote->setEntry(null);
+            }
+        }
+
+        return $this;
     }
 }

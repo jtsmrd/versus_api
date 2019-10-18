@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -75,29 +76,24 @@ class UserController extends AbstractController
      * @param $userId
      * @return mixed
      */
-    public function getFollowedUserCompetitions($userId)
+    public function getFollowedUserCompetitions(Request $request, $userId)
     {
-        $repository = $this->getDoctrine()->getRepository(Follower::class);
-        $followerRecords = $repository->findBy(['follower' => $userId]);
+        $page = $request->query->get('page', 0);
+        $limit = $request->query->get('limit', 10);
+        $offset = $page * $limit;
 
-        $followedUserIds = array_map(
-            function (Follower $item) {
-                return $item->getFollowedUser()->getId();
-            },
-            $followerRecords
-        );
-
-        $conn = $this->entityManager->getConnection();
-
-        $sql = '
-          SELECT c.id
-          FROM competition c
-          JOIN competition_user cu on c.id = cu.competition_id
-          WHERE cu.user_id IN (' . implode( ", ", $followedUserIds) . ')
-          AND c.active = 1
-          ORDER BY c.start_date DESC
+        $sql = 'select c.* from competition c
+            join competition_user cu on c.id = cu.competition_id
+            join follower f on cu.user_id = f.followed_user_id
+            join user u on f.follower_id = u.id
+            where u.id = ' . $userId . '
+            and c.active = \'1\'
+            order by c.start_date asc
+            limit ' . $limit . '
+            offset ' . $offset . '
         ';
 
+        $conn = $this->entityManager->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
@@ -119,6 +115,27 @@ class UserController extends AbstractController
             [],
             ['groups' => ['get-user-competitions']]
         );
+
+
+
+//        $repository = $this->getDoctrine()->getRepository(Follower::class);
+//        $followerRecords = $repository->findBy(['follower' => $userId]);
+//
+//        $followedUserIds = array_map(
+//            function (Follower $item) {
+//                return $item->getFollowedUser()->getId();
+//            },
+//            $followerRecords
+//        );
+//
+//        $sql = '
+//          SELECT c.id
+//          FROM competition c
+//          JOIN competition_user cu on c.id = cu.competition_id
+//          WHERE cu.user_id IN (' . implode( ", ", $followedUserIds) . ')
+//          AND c.active = 1
+//          ORDER BY c.start_date DESC
+//        ';
     }
 
 
