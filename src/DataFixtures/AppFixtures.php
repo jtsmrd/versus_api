@@ -137,6 +137,7 @@ class AppFixtures extends Fixture
             $entry->setUser($userReference);
             $entry->setFeatured($userReference->getFeatured());
             $entry->setRankId($userReference->getRankId());
+            $entry->setVoteCount(0);
 
             $manager->persist($entry);
 

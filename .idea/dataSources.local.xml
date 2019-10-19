@@ -2,7 +2,17 @@
 <project version="4">
   <component name="dataSourceStorageLocal">
     <data-source name="LocalDB0427" uuid="120e1019-c017-49fc-8000-be48e89412b8">
-      <database-info product="MySQL" version="10.3.12-MariaDB" jdbc-version="4.2" driver-name="MariaDB connector/J" driver-version="2.2.1" dbms="MYSQL" exact-version="10.3.12" exact-driver-version="2.2">
+      <database-info product="MySQL" version="10.4.6-MariaDB" jdbc-version="4.2" driver-name="MariaDB connector/J" driver-version="2.2.1" dbms="MYSQL" exact-version="10.4.6" exact-driver-version="2.2">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <introspection-schemas>*:@</introspection-schemas>
+    </data-source>
+    <data-source name="versus@localhost" uuid="17ebe6c2-0417-4ccd-a8a2-58b295ec28d5">
+      <database-info product="MariaDB" version="10.4.6-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.4.1" dbms="MYSQL" exact-version="10.4.6" exact-driver-version="2.4">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
