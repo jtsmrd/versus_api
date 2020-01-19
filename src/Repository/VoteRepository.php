@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Vote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -17,6 +18,21 @@ class VoteRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Vote::class);
+    }
+
+    public function getUserVoteForCompetition($competitionId, User $user): ?Vote
+    {
+        $vote = $this->createQueryBuilder('v')
+//            ->innerJoin('u.videos', 'v')
+            ->addSelect('v') 			// eager loading
+            ->andWhere('v.competitionId = :competitionId')
+            ->setParameter('competitionId', $competitionId)
+            ->andWhere('v.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $vote;
     }
 
     // /**

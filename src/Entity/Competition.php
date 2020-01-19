@@ -20,7 +20,14 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     }
  * )
  * @ApiResource(
- *     itemOperations={"get", "delete"},
+ *     itemOperations={
+ *          "get"={
+ *              "normalization_context"={
+ *                  "groups"={"get"}
+ *              }
+ *          },
+ *          "delete"
+ *      },
  *     collectionOperations={
  *          "get"={
  *              "normalization_context"={
@@ -284,5 +291,21 @@ class Competition
         }
 
         return $this;
+    }
+
+    /**
+     * @param $entry Entry
+     * @return Entry
+     */
+    public function getEntryThatIsNotEntry($entry): Entry
+    {
+        if($this->getLeftEntry() === $entry)
+        {
+            return $this->getRightEntry();
+        }
+        else
+        {
+            return $this->getLeftEntry();
+        }
     }
 }

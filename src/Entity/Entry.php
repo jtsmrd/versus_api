@@ -20,9 +20,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     }
  * )
  * @ApiResource(
- *     attributes={"order"={"createDate": "DESC"}},
+ *     attributes={"order"={"createDate": "DESC"}, "pagination_items_per_page"=10},
  *     itemOperations={
- *          "get",
+ *          "get"={
+ *              "normalization_context"={
+ *                  "groups"={"get", "get_vote"}
+ *              }
+ *          },
  *          "put"={
  *              "access_control"="is_granted('ROLE_USER') and object.getUser() == user"
  *          }
@@ -34,7 +38,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *          },
  *          "api_users_entries_get_subresource"={
  *              "normalization_context"={
- *                  "groups"={"get"}
+ *                  "groups"={"get-owner"}
  *              }
  *          }
  *      },
@@ -50,65 +54,66 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-owner", "get-user-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
      * @Assert\Length(max="100")
      */
     private $caption;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $typeId;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get_vote", "get-owner"})
      */
     private $createDate;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get_vote", "get-owner"})
      */
     private $featured;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get_vote", "get-owner"})
      * @Assert\DateTime()
      */
     private $matchDate;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"post", "get", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $mediaId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"post", "get", "get-owner"})
+     * @Groups({"post", "get_vote", "get-owner"})
      */
     private $rankId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"get_vote"})
      * @Assert\DateTime()
      */
     private $updateDate;
@@ -116,31 +121,37 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="entries")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-user-competitions"})
      */
     private $user;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-owner"})
+     * @Groups({"get_vote", "get-owner"})
      */
     private $matched;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-user-competitions"})
      */
     private $voteCount;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="entry")
+     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="entry"))
      */
     private $votes;
+
+    /**
+     * @Groups({"get_vote"})
+     */
+    private $userVoted;
 
     public function __construct()
     {
         $this->matched = false;
         $this->votes = new ArrayCollection();
+        $this->voteCount = 0;
     }
 
     public function getId(): ?int
@@ -324,5 +335,22 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserVoted(): ?bool
+    {
+
+        return true;
+    }
+
+    /**
+     * @param bool $userVoted
+     */
+    public function setUserVoted(bool $userVoted): void
+    {
+        $this->userVoted = $userVoted;
     }
 }

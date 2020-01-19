@@ -8,8 +8,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "get",
+ *          "post",
+ *          "put",
+ *          "delete"
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
+// * @UniqueEntity("entry")
+// * @UniqueEntity("user")
  */
 class Vote implements UserCreatedEntityInterface, CreateDateEntityInterface
 {
