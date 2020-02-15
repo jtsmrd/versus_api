@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Competition;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use PDO;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +17,16 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CompetitionRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    public function __construct(RegistryInterface $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Competition::class);
+
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -35,16 +45,35 @@ class CompetitionRepository extends ServiceEntityRepository
 //        ;
 //    }
 
+    public function getWinningCompetitions(
+        User $user,
+        \DateTime $startDate,
+        ?\DateTime $endDate
+    ) {
+        if ($endDate) {
 
-    /*
-    public function findOneBySomeField($value): ?Competition
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            return $this->createQueryBuilder('c')
+                ->select('c')
+                ->andWhere('c.winnerUserId = :userId')
+                ->andWhere('c.expireDate >= :startDate')
+                ->andWhere('c.expireDate <= :endDate')
+                ->setParameter('userId', $user->getId())
+                ->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+        else {
+            return $this->createQueryBuilder('c')
+                ->select('c')
+                ->andWhere('c.winnerUserId = :userId')
+                ->andWhere('c.expireDate >= :startDate')
+                ->setParameter('userId', $user->getId())
+                ->setParameter('startDate', $startDate)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
     }
-    */
 }

@@ -83,7 +83,7 @@ class VoteSubscriber implements EventSubscriberInterface
 
         $entry = $vote->getEntry();
 
-        $competition = $this->entityManager->getRepository(Competition::class)->find($vote->getCompetitionId());
+        $competition = $this->entityManager->getRepository(Competition::class)->find($vote->getCompetition()->getId());
         $previousVotedEntry = $competition->getEntryThatIsNotEntry($entry);
 
         $this->updateVoteCountForEntry($entry);

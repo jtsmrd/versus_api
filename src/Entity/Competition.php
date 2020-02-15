@@ -121,11 +121,22 @@ class Competition
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="competition", orphanRemoval=true)
+     */
+    private $votes;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $winnerVoteCount;
+
     public function __construct()
     {
         $this->active = true;
         $this->extended = false;
         $this->users = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -307,5 +318,48 @@ class Competition
         {
             return $this->getLeftEntry();
         }
+    }
+
+    /**
+     * @return Collection|Vote[]
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+            $vote->setCompetition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): self
+    {
+        if ($this->votes->contains($vote)) {
+            $this->votes->removeElement($vote);
+            // set the owning side to null (unless already changed)
+            if ($vote->getCompetition() === $this) {
+                $vote->setCompetition(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWinnerVoteCount(): ?int
+    {
+        return $this->winnerVoteCount;
+    }
+
+    public function setWinnerVoteCount(?int $winnerVoteCount): self
+    {
+        $this->winnerVoteCount = $winnerVoteCount;
+
+        return $this;
     }
 }

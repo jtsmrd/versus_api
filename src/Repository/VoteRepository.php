@@ -25,7 +25,7 @@ class VoteRepository extends ServiceEntityRepository
         $vote = $this->createQueryBuilder('v')
 //            ->innerJoin('u.videos', 'v')
             ->addSelect('v') 			// eager loading
-            ->andWhere('v.competitionId = :competitionId')
+            ->andWhere('v.competition = :competitionId')
             ->setParameter('competitionId', $competitionId)
             ->andWhere('v.user = :user')
             ->setParameter('user', $user)

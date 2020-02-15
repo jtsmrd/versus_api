@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190321220445 extends AbstractMigration
+final class Version20200215144126 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -23,12 +23,10 @@ final class Version20190321220445 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL, CHANGE password_change_date password_change_date INT DEFAULT NULL, CHANGE update_date update_date DATETIME DEFAULT NULL, CHANGE profile_image profile_image VARCHAR(200) DEFAULT NULL, CHANGE background_image background_image VARCHAR(200) DEFAULT NULL');
+        $this->addSql('ALTER TABLE leaderboard CHANGE feature_image feature_image VARCHAR(255) DEFAULT NULL, CHANGE background_image background_image VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE leader DROP week, DROP year, DROP month');
         $this->addSql('ALTER TABLE entry CHANGE match_date match_date DATETIME DEFAULT NULL, CHANGE update_date update_date DATETIME DEFAULT NULL');
-        $this->addSql('ALTER TABLE follower DROP FOREIGN KEY FK_B9D60946A76ED395');
-        $this->addSql('DROP INDEX IDX_B9D60946A76ED395 ON follower');
-        $this->addSql('ALTER TABLE follower CHANGE user_id follower_id INT NOT NULL');
-        $this->addSql('ALTER TABLE follower ADD CONSTRAINT FK_B9D60946AC24F853 FOREIGN KEY (follower_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_B9D60946AC24F853 ON follower (follower_id)');
+        $this->addSql('ALTER TABLE competition CHANGE left_entry_id left_entry_id INT DEFAULT NULL, CHANGE right_entry_id right_entry_id INT DEFAULT NULL, CHANGE winner_user_id winner_user_id INT DEFAULT NULL, CHANGE winner_vote_count winner_vote_count INT DEFAULT NULL');
         $this->addSql('ALTER TABLE profile_image CHANGE url url VARCHAR(255) DEFAULT NULL');
     }
 
@@ -37,12 +35,10 @@ final class Version20190321220445 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('ALTER TABLE competition CHANGE left_entry_id left_entry_id INT DEFAULT NULL, CHANGE right_entry_id right_entry_id INT DEFAULT NULL, CHANGE winner_user_id winner_user_id INT DEFAULT NULL, CHANGE winner_vote_count winner_vote_count INT DEFAULT NULL');
         $this->addSql('ALTER TABLE entry CHANGE match_date match_date DATETIME DEFAULT \'NULL\', CHANGE update_date update_date DATETIME DEFAULT \'NULL\'');
-        $this->addSql('ALTER TABLE follower DROP FOREIGN KEY FK_B9D60946AC24F853');
-        $this->addSql('DROP INDEX IDX_B9D60946AC24F853 ON follower');
-        $this->addSql('ALTER TABLE follower CHANGE follower_id user_id INT NOT NULL');
-        $this->addSql('ALTER TABLE follower ADD CONSTRAINT FK_B9D60946A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_B9D60946A76ED395 ON follower (user_id)');
+        $this->addSql('ALTER TABLE leader ADD week INT DEFAULT NULL, ADD year INT DEFAULT NULL, ADD month INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE leaderboard CHANGE feature_image feature_image VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE background_image background_image VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
         $this->addSql('ALTER TABLE profile_image CHANGE url url VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
         $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE password_change_date password_change_date INT DEFAULT NULL, CHANGE update_date update_date DATETIME DEFAULT \'NULL\', CHANGE profile_image profile_image VARCHAR(200) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE background_image background_image VARCHAR(200) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
     }

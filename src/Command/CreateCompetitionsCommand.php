@@ -134,12 +134,15 @@ class CreateCompetitionsCommand extends Command
             and e.categoryId = :categoryId
             and e.rankId = :rankId
             and e.id != :id
+            and e.user != :user
             order by e.createDate asc"
         );
+
         $query->setParameter('typeId', $entry->getTypeId());
         $query->setParameter('categoryId', $entry->getCategoryId());
         $query->setParameter('rankId', $entry->getRankId());
         $query->setParameter('id', $entry->getId());
+        $query->setParameter('user', $entry->getUser());
         $query->setMaxResults(1);
         $matchId = $query->getOneOrNullResult();
 
