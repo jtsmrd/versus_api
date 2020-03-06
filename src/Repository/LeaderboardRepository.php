@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Leaderboard;
+use App\Entity\LeaderboardType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,32 +20,13 @@ class LeaderboardRepository extends ServiceEntityRepository
         parent::__construct($registry, Leaderboard::class);
     }
 
-    // /**
-    //  * @return Leaderboard[] Returns an array of Leaderboard objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getLeaderboard(LeaderboardType $leaderboardType): ?Leaderboard
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Leaderboard
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('l.type = :type')
+            ->setParameter('type', $leaderboardType)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

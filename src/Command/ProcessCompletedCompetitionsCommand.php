@@ -14,6 +14,7 @@ use App\Entity\Leader;
 use App\Entity\LeaderboardType;
 use App\Entity\User;
 use App\Repository\CompetitionRepository;
+use App\Repository\LeaderboardRepository;
 use App\Repository\LeaderboardTypeRepository;
 use App\Repository\LeaderRepository;
 use App\Repository\UserRepository;
@@ -52,6 +53,11 @@ class ProcessCompletedCompetitionsCommand extends Command
     private $leaderboardTypeRepository;
 
     /**
+     * @var LeaderboardRepository
+     */
+    private $leaderboardRepository;
+
+    /**
      * @var UserRepository
      */
     private $userRepository;
@@ -62,6 +68,7 @@ class ProcessCompletedCompetitionsCommand extends Command
         EntityManagerInterface $entityManager,
         LeaderRepository $leaderRepository,
         LeaderboardTypeRepository $leaderboardTypeRepository,
+        LeaderboardRepository $leaderboardRepository,
         UserRepository $userRepository
     ) {
         parent::__construct();
@@ -71,6 +78,7 @@ class ProcessCompletedCompetitionsCommand extends Command
         $this->leaderRepository = $leaderRepository;
         $this->leaderboardTypeRepository = $leaderboardTypeRepository;
         $this->userRepository = $userRepository;
+        $this->leaderboardRepository = $leaderboardRepository;
     }
 
     protected function configure()
@@ -99,6 +107,9 @@ class ProcessCompletedCompetitionsCommand extends Command
                 $this->processCompletedCompetition($competition);
             }
         }
+
+        // Update leaderbards with leader image
+        $this->updateLeaderboardFeatureImages();
     }
 
     private function getCompletedCompetitions()
@@ -244,5 +255,31 @@ class ProcessCompletedCompetitionsCommand extends Command
         $leader->setLeaderboardType($leaderboardType);
         $leader->setStartDate($startDate);
         return $leader;
+    }
+
+    private function updateLeaderboardFeatureImages()
+    {
+        $this->updateLeaderboardFeatureImage('Weekly');
+
+        $this->updateLeaderboardFeatureImage('Monthly');
+
+        $this->updateLeaderboardFeatureImage('All Time');
+    }
+
+    private function updateLeaderboardFeatureImage(string $leaderboardTypeName)
+    {
+        $leaderboardType = $this->leaderboardTypeRepository->getLeaderboardType($leaderboardTypeName);
+
+        $topWeeklyLeader = $this->leaderRepository->getTopLeader($leaderboardType);
+
+        if ($topWeeklyLeader) {
+
+            $leaderboard = $this->leaderboardRepository->getLeaderboard($leaderboardType);
+
+            $leaderboard->setFeatureImage($topWeeklyLeader->getUser()->getProfileImage());
+
+            $this->entityManager->persist($leaderboard);
+            $this->entityManager->flush();
+        }
     }
 }

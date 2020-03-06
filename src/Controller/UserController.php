@@ -87,11 +87,12 @@ class UserController extends AbstractController
             join follower f on cu.user_id = f.followed_user_id
             join user u on f.follower_id = u.id
             where u.id = ' . $userId . '
-            and c.active = \'1\'
             order by c.start_date asc
             limit ' . $limit . '
             offset ' . $offset . '
         ';
+
+//        and c.active = '1'
 
         $conn = $this->entityManager->getConnection();
         $stmt = $conn->prepare($sql);
