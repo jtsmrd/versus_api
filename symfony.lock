@@ -107,6 +107,9 @@
     "egulias/email-validator": {
         "version": "2.1.7"
     },
+    "fig/link-util": {
+        "version": "1.1.0"
+    },
     "fzaninotto/faker": {
         "version": "v1.8.0"
     },
@@ -155,6 +158,9 @@
     "pagerfanta/pagerfanta": {
         "version": "v2.0.1"
     },
+    "php": {
+        "version": "7.3"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -168,6 +174,9 @@
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
@@ -305,6 +314,9 @@
     "symfony/polyfill-intl-icu": {
         "version": "v1.10.0"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.14.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
     },
@@ -409,6 +421,9 @@
     },
     "symfony/var-exporter": {
         "version": "v4.2.2"
+    },
+    "symfony/web-link": {
+        "version": "v4.2.12"
     },
     "symfony/web-profiler-bundle": {
         "version": "3.3",

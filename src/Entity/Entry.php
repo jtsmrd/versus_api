@@ -35,13 +35,15 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *          "get",
  *          "post"={
  *              "access_control"="is_granted('ROLE_USER')"
- *          },
+ *          }
+ *      },
+ *     subresourceOperations={
  *          "api_users_entries_get_subresource"={
  *              "normalization_context"={
  *                  "groups"={"get-owner"}
  *              }
  *          }
- *      },
+ *     },
  *     denormalizationContext={
  *          "groups"={"post"}
  *     }
@@ -54,27 +56,27 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get_vote", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-owner", "get-competitions", "get-user-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-competitions", "get-user-competitions"})
      * @Assert\Length(max="100")
      */
     private $caption;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-competitions", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-competitions", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $typeId;
@@ -100,7 +102,7 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get", "post", "get_vote", "get-owner", "get-user-competitions"})
+     * @Groups({"get", "post", "get_vote", "get-owner", "get-competitions", "get-user-competitions"})
      * @Assert\NotBlank()
      */
     private $mediaId;
@@ -121,7 +123,7 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="entries")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get", "get_vote", "get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-competitions"})
      */
     private $user;
 
@@ -133,7 +135,7 @@ class Entry implements UserCreatedEntityInterface, CreateDateEntityInterface, Up
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get_vote", "get-user-competitions"})
+     * @Groups({"get", "get_vote", "get-competitions", "get-user-competitions"})
      */
     private $voteCount;
 

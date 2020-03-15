@@ -31,10 +31,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     collectionOperations={
  *          "get"={
  *              "normalization_context"={
- *                  "groups"={"get-user-competitions"}
+ *                  "groups"={"get-competitions"}
  *              }
  *          },
- *          "post",
+ *          "post"
+ *     },
+ *     subresourceOperations={
  *          "api_users_competitions_get_subresource"={
  *              "normalization_context"={
  *                  "groups"={"get-user-competitions"}
@@ -50,69 +52,69 @@ class Competition
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $categoryId;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $typeId;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $expireDate;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $extended;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $featured;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"get", "get-user-competitions"})
+     * @Groups({"get", "get-competitions", "get-user-competitions"})
      */
     private $winnerUserId;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Entry")
      * @ApiSubresource()
-     * @Groups({"get", "post", "get-user-competitions"})
+     * @Groups({"get", "post", "get-competitions", "get-user-competitions"})
      */
     private $leftEntry;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Entry")
      * @ApiSubresource()
-     * @Groups({"get", "post", "get-user-competitions"})
+     * @Groups({"get", "post", "get-competitions", "get-user-competitions"})
      */
     private $rightEntry;
 

@@ -120,7 +120,7 @@ class AppFixtures extends Fixture
        $this->loadImageEntries($manager);
        $this->loadVideoEntries($manager);
        $this->loadLeaderboards($manager);
-       $this->loadCompetitions($manager);
+//       $this->loadCompetitions($manager);
 
     }
 

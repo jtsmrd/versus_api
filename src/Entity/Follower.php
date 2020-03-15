@@ -20,7 +20,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     itemOperations={"get", "put", "delete"},
  *     collectionOperations={
  *          "get",
- *          "post",
+ *          "post"
+ *     },
+ *     subresourceOperations={
  *          "api_users_followed_users_get_subresource"={
  *              "normalization_context"={
  *                  "groups"={"followed-users"}

@@ -87,13 +87,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $bio;
 
@@ -111,7 +111,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "post", "put", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post", "put"})
      */
@@ -134,7 +134,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $featured;
 
@@ -197,20 +197,20 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $rankId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get", "followers", "followed-users", "get-user-competitions"})
+     * @Groups({"get", "followers", "followed-users", "get-competitions"})
      * @Assert\DateTime()
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"get", "post", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "post", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      * @Assert\NotBlank(groups={"post"})
      * @Assert\Length(min=6, max=50, groups={"post"})
      */
@@ -230,13 +230,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $profileImage;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
-     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "put", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $backgroundImage;
 
@@ -254,13 +254,13 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $followedUserCount;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"get", "get-owner", "followers", "followed-users", "get-user-competitions", "get-leaders"})
+     * @Groups({"get", "get-owner", "followers", "followed-users", "get-leaders", "get-competitions"})
      */
     private $followerCount;
 
@@ -280,6 +280,12 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
      */
     private $totalWins;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="user", orphanRemoval=true)
+     * @ApiSubresource()
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -294,6 +300,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
         $this->followerCount = 0;
         $this->votes = new ArrayCollection();
         $this->totalWins = 0;
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -667,6 +674,37 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
     public function setTotalWins(int $totalWins): self
     {
         $this->totalWins = $totalWins;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
 
         return $this;
     }
