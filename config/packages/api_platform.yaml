@@ -5,8 +5,9 @@ api_platform:
         enabled: true
     collection:
         pagination:
-#            enabled: true
-#            partial: true
+            items_per_page: 50
+            partial: true
+
     exception_to_status:
         App\Exception\EmptyBodyException: 400
         App\Exception\InvalidConfirmationTokenException: 404

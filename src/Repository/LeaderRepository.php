@@ -122,6 +122,7 @@ class LeaderRepository extends ServiceEntityRepository
             ->setParameter('leaderboardType', $leaderboardType)
             ->setParameter('startDate', $startDate)
             ->orderBy('l.winCount', 'DESC')
+            ->addOrderBy('l.voteCount', 'DESC')
             ->setMaxResults(50)
             ->getQuery();
 

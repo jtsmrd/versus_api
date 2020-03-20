@@ -286,6 +286,12 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"post"})
+     */
+    private $apnsToken;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -705,6 +711,18 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
                 $notification->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApnsToken(): ?string
+    {
+        return $this->apnsToken;
+    }
+
+    public function setApnsToken(?string $apnsToken): self
+    {
+        $this->apnsToken = $apnsToken;
 
         return $this;
     }

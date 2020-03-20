@@ -6,6 +6,7 @@ use App\Entity\Competition;
 use App\Entity\Entry;
 use App\Entity\Leaderboard;
 use App\Entity\LeaderboardType;
+use App\Entity\NotificationType;
 use App\Entity\User;
 use App\Security\TokenGenerator;
 use DateInterval;
@@ -35,6 +36,11 @@ class AppFixtures extends Fixture
      * @var User[]
      */
     private $users;
+
+    /**
+     * @var User[]
+     */
+    private $adminUsers;
 
     /**
      * @var Entry[]
@@ -106,6 +112,7 @@ class AppFixtures extends Fixture
         $this->faker = \Faker\Factory::create();
         $this->tokenGenerator = $tokenGenerator;
         $this->users = new ArrayCollection();
+        $this->adminUsers = new ArrayCollection();
         $this->entries = new ArrayCollection();
     }
 
@@ -117,15 +124,26 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
        $this->loadUsers($manager);
-       $this->loadImageEntries($manager);
-       $this->loadVideoEntries($manager);
+
+       // Load entries for admin users first
+       $this->loadImageEntries($manager, true, 100);
+       $this->loadVideoEntries($manager, true, 100);
+
+       // Load entries for non-admin users
+       $this->loadImageEntries($manager, false, 500);
+       $this->loadVideoEntries($manager, false, 500);
+
        $this->loadLeaderboards($manager);
+       $this->loadNotificationTypes($manager);
 //       $this->loadCompetitions($manager);
 
     }
 
-    public function loadImageEntries(ObjectManager $manager)
-    {
+    public function loadImageEntries(
+        ObjectManager $manager,
+        bool $useAdmin,
+        int $numEntries
+    ) {
         $mediaIds = [
             '0F2F12ED-45FD-4778-BF33-AA81D8007324',
             '09548451-4053-4719-9F60-D64381864F4C',
@@ -135,7 +153,7 @@ class AppFixtures extends Fixture
             '0a0c59a1-dedf-40b1-9368-345a7571d71d'
         ];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < $numEntries; $i++) {
             $entry = new Entry();
             $entry->setCaption($this->faker->realText(30));
             $entry->setCategoryId(rand(1, 7));
@@ -144,7 +162,7 @@ class AppFixtures extends Fixture
 
             $entry->setMediaId($mediaIds[rand(0, 5)]);
 
-            $userReference = $this->getRandomUserReference();
+            $userReference = $this->getRandomUserReference($useAdmin);
 
             $entry->setUser($userReference);
             $entry->setFeatured($userReference->getFeatured());
@@ -159,8 +177,11 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function loadVideoEntries(ObjectManager $manager)
-    {
+    public function loadVideoEntries(
+        ObjectManager $manager,
+        bool $useAdmin,
+        int $numEntries
+    ) {
         $mediaIds = [
             '1EAF80D6-4277-48B6-8738-195BD7C5BDE8',
             '548AC657-FB1A-43C5-916E-CC7918B6A11E',
@@ -173,7 +194,7 @@ class AppFixtures extends Fixture
             'DDDA767D-B7CC-464C-8E73-674E746EF49E'
         ];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < $numEntries; $i++) {
             $entry = new Entry();
             $entry->setCaption($this->faker->realText(30));
             $entry->setCategoryId(rand(1, 7));
@@ -182,7 +203,7 @@ class AppFixtures extends Fixture
 
             $entry->setMediaId($mediaIds[rand(0, 8)]);
 
-            $userReference = $this->getRandomUserReference();
+            $userReference = $this->getRandomUserReference($useAdmin);
 
             $entry->setUser($userReference);
             $entry->setFeatured($userReference->getFeatured());
@@ -201,7 +222,7 @@ class AppFixtures extends Fixture
     {
         $featured = false;
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
 
             $username = $this->faker->userName;
 
@@ -226,7 +247,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($user);
 
-//            $this->users->add($user);
+            $this->users->add($user);
 
             $featured = !$featured;
         }
@@ -256,7 +277,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($user);
 
-            $this->users->add($user);
+            $this->adminUsers->add($user);
         }
 
         $manager->flush();
@@ -303,9 +324,14 @@ class AppFixtures extends Fixture
     /**
      * @return User
      */
-    private function getRandomUserReference(): User
+    private function getRandomUserReference(bool $useAdmin): User
     {
-        return $this->users[rand(0, $this->users->count() - 1)];
+        if ($useAdmin) {
+            return $this->users[rand(0, $this->adminUsers->count() - 1)];
+        }
+        else {
+            return $this->users[rand(0, $this->users->count() - 1)];
+        }
     }
 
     /**
@@ -355,6 +381,37 @@ class AppFixtures extends Fixture
 
 
         $manager->flush();
+    }
+
+    private function loadNotificationTypes(ObjectManager $manager)
+    {
+        $typeNames = [
+            'New Follower',
+            'Competition Matched',
+            'New Vote',
+            'Competition Won',
+            'Competition Lost',
+            'Rank Up',
+            'Leaderboard',
+            'Top Leader',
+            'New Followed User Competition',
+            'New Comment',
+            'New Direct Message'
+        ];
+
+        foreach ($typeNames as $name) {
+            $this->addNotificationType($manager, $name);
+        }
+
+        $manager->flush();
+    }
+
+    private function addNotificationType(ObjectManager $manager, string $name)
+    {
+        $notificationType = new NotificationType();
+        $notificationType->setName($name);
+
+        $manager->persist($notificationType);
     }
 
     private function getRandomDate(): \DateTime

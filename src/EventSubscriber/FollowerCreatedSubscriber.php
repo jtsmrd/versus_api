@@ -11,6 +11,7 @@ namespace App\EventSubscriber;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Follower;
 use App\Entity\Notification;
+use App\Entity\NotificationType;
 use App\Entity\User;
 use App\PushNotification\PushNotificationService;
 use App\Repository\NotificationTypeRepository;
@@ -95,45 +96,49 @@ class FollowerCreatedSubscriber implements EventSubscriberInterface
         $this->entityManager->persist($follower);
         $this->entityManager->flush();
 
-        $this->createFollowerNotification($followedUser, $follower);
+        $notification = $this->createFollowerNotification($followedUser, $follower);
 
-        $push = new PushNotificationService();
-        $push->pushNotification('0cd9d2d44bb28ae7cf6c1337b3169ddb9f472dd5b6e40e00b65acd8470631edc');
+        if ($notification && $notification->getApnsToken()) {
+            $push = new PushNotificationService($this->logger);
+            $push->pushNotification(
+                $notification->getApnsToken(),
+                $notification->getMessage(),
+                $notification->getPayload()
+            );
+        }
     }
 
-    private function createFollowerNotification(User $followedUser, User $follower)
+    private function createFollowerNotification(User $followedUser, User $follower): ?Notification
     {
         $notificationType = $this->notificationTypeRepository->getNotificationType(
             'New Follower'
         );
 
         if (!$notificationType) {
-            return;
+            return null;
         }
-
-        $this->logger->debug('NotificationType: ' . $notificationType->getName());
 
         $notification = new Notification();
         $notification->setType($notificationType);
         $notification->setUser($followedUser);
+        $notification->setApnsToken($followedUser->getApnsToken());
         $notification->setCreateDate(new \DateTime());
 
         $message = '@' . $follower->getUsername() . ' started following you.';
         $notification->setMessage($message);
 
-        $this->logger->debug('Message: ' . $message);
-
         $payloadArray = [
-            'notificationInfo' => [
-                'followerUserId' => $follower->getId()
-            ]
+            'followerUserId' => $follower->getId(),
+            'followerUsername' => $follower->getUsername(),
+            'followerProfileImage' => $follower->getProfileImage()
         ];
 
         $payload = json_encode($payloadArray);
-        $this->logger->debug('Payload: ' . $payload);
         $notification->setPayload($payload);
 
         $this->entityManager->persist($notification);
         $this->entityManager->flush();
+
+        return $notification;
     }
 }

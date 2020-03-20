@@ -11,14 +11,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Controller\UploadProfileImageAction;
 
 /**
  * Class ProfileImage
  * @package App\Entity
  * @ORM\Entity()
- * @Vich\Uploadable()
  * @ApiResource(
  *      collectionOperations={
  *          "get",
@@ -41,7 +39,6 @@ class ProfileImage
     private $id;
 
     /**
-     * @Vich\UploadableField(mapping="profile_images", fileNameProperty="url")
      * @Assert\NotNull()
      */
     private $file;

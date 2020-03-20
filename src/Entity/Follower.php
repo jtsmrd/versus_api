@@ -65,14 +65,14 @@ class Follower implements UserCreatedEntityInterface, CreateDateEntityInterface
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="followedUsers")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"followers"})
+     * @Groups({"followers", "followed-users"})
      */
     private $follower;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="followers")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"post", "followed-users"})
+     * @Groups({"post", "followers", "followed-users"})
      */
     private $followedUser;
 

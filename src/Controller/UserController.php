@@ -78,9 +78,9 @@ class UserController extends AbstractController
      */
     public function getFollowedUserCompetitions(Request $request, $userId)
     {
-        $page = $request->query->get('page', 0);
-        $limit = $request->query->get('limit', 10);
-        $offset = $page * $limit;
+        $page = $request->query->get('page', 1);
+        $limit = $request->query->get('limit', 50);
+        $offset = ($page - 1) * $limit;
 
         $sql = 'select c.* from competition c
             join competition_user cu on c.id = cu.competition_id
@@ -114,7 +114,7 @@ class UserController extends AbstractController
             $compRecords,
             Response::HTTP_OK,
             [],
-            ['groups' => ['get-user-competitions']]
+            ['groups' => ['get-competitions']]
         );
 
 

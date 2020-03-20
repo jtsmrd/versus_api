@@ -8,7 +8,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={
+ *     itemOperations={
+ *          "get",
+ *          "put"={
+*               "security"="is_granted('IS_AUTHENTICATED_FULLY') and object.user == user",
+ *              "denormalization_context"={
+ *                  "groups"={"put"}
+ *              },
+ *              "normalization_context"={
+ *                  "groups"={"user-notifications"}
+ *              }
+ *          }
+ *      },
+ *     subresourceOperations={
  *          "api_users_notifications_get_subresource"={
  *              "normalization_context"={
  *                  "groups"={"user-notifications"}
@@ -66,9 +78,14 @@ class Notification
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"user-notifications"})
+     * @Groups({"user-notifications", "put"})
      */
     private $wasViewed;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $apnsToken;
 
     public function __construct()
     {
@@ -160,6 +177,18 @@ class Notification
     public function setWasViewed(bool $wasViewed): self
     {
         $this->wasViewed = $wasViewed;
+
+        return $this;
+    }
+
+    public function getApnsToken(): ?string
+    {
+        return $this->apnsToken;
+    }
+
+    public function setApnsToken(?string $apnsToken): self
+    {
+        $this->apnsToken = $apnsToken;
 
         return $this;
     }
