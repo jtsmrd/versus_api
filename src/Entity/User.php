@@ -288,7 +288,7 @@ class User implements UserInterface, CreateDateEntityInterface, UpdateDateEntity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"post"})
+     * @Groups({"put"})
      */
     private $apnsToken;
 

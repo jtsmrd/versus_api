@@ -19,8 +19,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CreateCompetitionsCommand extends Command
 {
@@ -40,11 +38,6 @@ class CreateCompetitionsCommand extends Command
     private $entityManager;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @var Collection
      */
     private $processedIds;
@@ -52,14 +45,12 @@ class CreateCompetitionsCommand extends Command
     public function __construct(
         LoggerInterface $logger,
         EntryRepository $entryRepository,
-        EntityManagerInterface $entityManager,
-        SerializerInterface $serializer
+        EntityManagerInterface $entityManager
     ) {
         parent::__construct();
         $this->logger = $logger;
         $this->entryRepository = $entryRepository;
         $this->entityManager = $entityManager;
-        $this->serializer = $serializer;
         $this->processedIds = new ArrayCollection();
     }
 
