@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b030eedd-7bf6-40e1-909f-69284781b272" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Controller/CommandController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Command/SendPushNotificationsCommand.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Listener/EntityListener.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/api_platform.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/api_platform.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Command/CreateCompetitionsCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/CreateCompetitionsCommand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/CommandController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommandController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Competition.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Competition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Follower.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Follower.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EventSubscriber/CompetitionCreatedSubscriber.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EventSubscriber/GetEntrySubscriber.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventSubscriber/GetEntrySubscriber.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/NotificationRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/NotificationRepository.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,88 +59,32 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Entity/Notification.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="750">
-                  <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
-                  <folding>
-                    <element signature="e#30#74#0#PHP" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Entity/Competition.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
-                  <caret line="35" column="14" selection-start-line="35" selection-start-column="14" selection-end-line="35" selection-end-column="14" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Controller/CommandController.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="517">
-                  <caret line="46" column="1" lean-forward="true" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
-                  <folding>
-                    <element signature="e#120#185#0#PHP" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/.env">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="342">
-                  <caret line="28" column="33" lean-forward="true" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/17ebe6c2-0417-4ccd-a8a2-58b295ec28d5/console.sql">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="33" selection-start-line="33" selection-end-line="33" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Controller/DefaultController.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
-                  <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
-                  <folding>
-                    <element signature="e#119#139#0#PHP" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/var/log/dev.log">
-              <provider selected="true" editor-type-id="LogFileEditorProvider">
-                <state relative-caret-position="600">
-                  <caret line="40" selection-start-line="40" selection-end-line="40" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Controller/CommandController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1200">
+              <caret line="85" column="52" lean-forward="true" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
+              <folding>
+                <element signature="e#120#185#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Listener/EntityListener.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="486">
+              <caret line="80" column="34" lean-forward="true" selection-start-line="80" selection-start-column="34" selection-end-line="80" selection-end-column="34" />
+              <folding>
+                <element signature="e#118#145#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -145,6 +96,7 @@
       <find>xde</find>
       <find>get-user-competitions</find>
       <find>$serializer</find>
+      <find>$notificationTypeRepository</find>
     </findStrings>
     <replaceStrings>
       <replace>get</replace>
@@ -156,10 +108,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Controller/UploadProfileImageAction.php" />
-        <option value="$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle/Security/Http/Authentication/AuthenticationSuccessHandler.php" />
-        <option value="$PROJECT_DIR$/src/Security/UserLoginSuccessHandler.php" />
-        <option value="$PROJECT_DIR$/config/services.yaml" />
         <option value="$PROJECT_DIR$/src/EventSubscriber/UserLoginSubscriber.php" />
         <option value="$PROJECT_DIR$/src/Repository/FollowerRepository.php" />
         <option value="$PROJECT_DIR$/src/EventSubscriber/FollowerDeletedSubscriber.php" />
@@ -167,13 +115,11 @@
         <option value="$PROJECT_DIR$/src/Migrations/Version20190324023218.php" />
         <option value="$PROJECT_DIR$/src/Migrations/Version20190324023152.php" />
         <option value="$PROJECT_DIR$/src/Controller/GetFollowedUserCompetitionsAction.php" />
-        <option value="$PROJECT_DIR$/src/EventSubscriber/CompetitionCreatedSubscriber.php" />
         <option value="$PROJECT_DIR$/src/Repository/UserRepository.php" />
         <option value="$PROJECT_DIR$/src/EventSubscriber/VoteCreatedSubscriber.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/120e1019-c017-49fc-8000-be48e89412b8/console.sql" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/120e1019-c017-49fc-8000-be48e89412b8/console_4.sql" />
         <option value="$PROJECT_DIR$/src/EventSubscriber/EntryCreatedSubscriber.php" />
-        <option value="$PROJECT_DIR$/src/EventSubscriber/GetEntrySubscriber.php" />
         <option value="$PROJECT_DIR$/src/Controller/VoteController.php" />
         <option value="$PROJECT_DIR$/config/packages/security.yaml" />
         <option value="$PROJECT_DIR$/src/Repository/VoteRepository.php" />
@@ -187,14 +133,11 @@
         <option value="$PROJECT_DIR$/src/Command/ProcessCompletedCompetitionsCommand.php" />
         <option value="$PROJECT_DIR$/src/Repository/NotificationTypeRepository.php" />
         <option value="$PROJECT_DIR$/src/Entity/NotificationType.php" />
-        <option value="$PROJECT_DIR$/src/Entity/Competition.php" />
         <option value="$PROJECT_DIR$/src/Entity/Entry.php" />
         <option value="/usr/local/etc/php/7.3/php.ini" />
-        <option value="$PROJECT_DIR$/src/Entity/Follower.php" />
         <option value="$PROJECT_DIR$/src/Repository/LeaderRepository.php" />
         <option value="$PROJECT_DIR$/src/PushNotification/PushNotificationService.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
-        <option value="$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/17ebe6c2-0417-4ccd-a8a2-58b295ec28d5/console.sql" />
         <option value="$PROJECT_DIR$/src/Entity/Notification.php" />
         <option value="$PROJECT_DIR$/composer.json" />
@@ -204,7 +147,16 @@
         <option value="$PROJECT_DIR$/src/Entity/User.php" />
         <option value="$PROJECT_DIR$/src/EventSubscriber/VoteSubscriber.php" />
         <option value="$PROJECT_DIR$/config/packages/api_platform.yaml" />
+        <option value="$PROJECT_DIR$/src/EventSubscriber/GetEntrySubscriber.php" />
+        <option value="$PROJECT_DIR$/src/EventSubscriber/CompetitionCreatedSubscriber.php" />
+        <option value="$PROJECT_DIR$/config/services.yaml" />
+        <option value="$PROJECT_DIR$/src/Entity/Competition.php" />
+        <option value="$PROJECT_DIR$/src/Listener/EntityListener.php" />
+        <option value="$PROJECT_DIR$/src/Entity/Follower.php" />
         <option value="$PROJECT_DIR$/src/Command/CreateCompetitionsCommand.php" />
+        <option value="$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php" />
+        <option value="$PROJECT_DIR$/src/Repository/NotificationRepository.php" />
+        <option value="$PROJECT_DIR$/src/Command/SendPushNotificationsCommand.php" />
         <option value="$PROJECT_DIR$/src/Controller/CommandController.php" />
         <option value="$PROJECT_DIR$/.env" />
       </list>
@@ -331,7 +283,7 @@
     </include_path>
   </component>
   <component name="PhpXdebugProxy" ide_key="PHPSTORM" port="8001" />
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="1680" />
     <option name="height" value="1050" />
   </component>
@@ -354,12 +306,6 @@
               <item name="versus_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="versus_api" type="462c0819:PsiDirectoryNode" />
               <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="versus_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="versus_api" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="versus_api" type="b2602c69:ProjectViewProjectNode" />
@@ -389,6 +335,12 @@
               <item name="versus_api" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="EventSubscriber" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="versus_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="versus_api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Listener" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="versus_api" type="b2602c69:ProjectViewProjectNode" />
@@ -465,8 +417,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PHP Script.User.php" />
         <item itemvalue="JavaScript Debug.PushNotificationService.php" />
+        <item itemvalue="PHP Script.User.php" />
       </list>
     </recent_temporary>
   </component>
@@ -556,18 +508,18 @@
       <workItem from="1584652761581" duration="3351000" />
       <workItem from="1584736968363" duration="1571000" />
       <workItem from="1584812109486" duration="1209000" />
-      <workItem from="1584890520197" duration="3350000" />
+      <workItem from="1584890520197" duration="16975000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="327665000" />
+    <option name="totallyTimeSpent" value="341290000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13675214" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13675214" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -581,7 +533,7 @@
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.36237624" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.33265308" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.2897959" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32959184" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32959184" />
       <window_info anchor="bottom" id="PHP-CGI Server" order="14" weight="0.32959184" />
@@ -636,93 +588,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Repository/UserRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#34#54#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/EntryRepository.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/FollowerRepository.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/CompetitionRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="29" column="5" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
-          <folding>
-            <element signature="e#34#61#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/VoteController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="22" column="61" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
-          <folding>
-            <element signature="e#120#140#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/symfony/yaml/Yaml.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Leaderboard.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="28" column="29" lean-forward="true" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/LeaderboardRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="27" column="24" lean-forward="true" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Leader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1590">
-          <caret line="110" selection-start-line="110" selection-end-line="110" />
-          <folding>
-            <element signature="e#30#72#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/LeaderController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="30" column="7" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
-          <folding>
-            <element signature="e#120#142#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/doctrine.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="505">
@@ -764,13 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/NotificationTypeRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Entity/CreateDateEntityInterface.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -801,34 +659,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Command/ProcessCompletedCompetitionsCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="91" column="5" lean-forward="true" selection-start-line="91" selection-start-column="5" selection-end-line="91" selection-end-column="5" />
-          <folding>
-            <element signature="e#117#144#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/PushNotification/AuthKey_TLM9ZRAU52.p8">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Repository/LeaderRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="88" column="59" selection-start-line="88" selection-start-column="59" selection-end-line="88" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Follower.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="74" column="55" selection-start-line="74" selection-start-column="55" selection-end-line="74" selection-end-column="55" />
         </state>
       </provider>
     </entry>
@@ -852,16 +686,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataFixtures/AppFixtures.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="113" column="45" selection-start-line="113" selection-start-column="45" selection-end-line="113" selection-end-column="45" />
-          <folding>
-            <element signature="e#36#63#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1597">
@@ -879,13 +703,6 @@
           <folding>
             <element signature="e#30#72#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/PushNotification/PushNotificationService.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -921,71 +738,10 @@
         <state relative-caret-position="-42" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="299" column="52" selection-start-line="299" selection-start-column="52" selection-end-line="299" selection-end-column="52" />
-          <folding>
-            <element signature="e#30#72#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/api_platform.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
-          <folding>
-            <element signature="e#124#175#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Competition.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="35" column="14" selection-start-line="35" selection-start-column="14" selection-end-line="35" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/17ebe6c2-0417-4ccd-a8a2-58b295ec28d5/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Command/CreateCompetitionsCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="56" column="34" lean-forward="true" selection-start-line="56" selection-start-column="34" selection-end-line="56" selection-end-column="34" />
-          <folding>
-            <element signature="e#116#143#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/packages/security.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="35" column="35" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="26" column="29" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
-          <folding>
-            <element signature="e#119#139#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -996,17 +752,185 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/packages/api_platform.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/DefaultController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="29" column="5" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+          <folding>
+            <element signature="e#119#139#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventSubscriber/GetEntrySubscriber.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="40" column="23" lean-forward="true" selection-start-line="40" selection-start-column="23" selection-end-line="40" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3903">
+          <caret line="299" column="52" selection-start-line="299" selection-start-column="52" selection-end-line="299" selection-end-column="52" />
+          <folding>
+            <element signature="e#30#72#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/packages/monolog.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="32" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/var/log/token_confirmation_dev.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Command/ProcessCompletedCompetitionsCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="111" column="48" lean-forward="true" selection-start-line="111" selection-start-column="48" selection-end-line="111" selection-end-column="48" />
+          <folding>
+            <element signature="e#117#144#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://17ebe6c2-0417-4ccd-a8a2-58b295ec28d5/schema/versus/table/follower">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/CompetitionRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-148" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/Competition.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+          <folding>
+            <element signature="e#30#72#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/EntryRepository.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/VoteRepository.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/NotificationTypeRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="25" column="41" lean-forward="true" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/LeaderRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="107" column="43" lean-forward="true" selection-start-line="107" selection-start-column="43" selection-end-line="107" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DataFixtures/AppFixtures.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="580">
+          <caret line="415" lean-forward="true" selection-start-line="415" selection-end-line="415" />
+          <folding>
+            <element signature="e#36#63#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/Follower.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="50" column="7" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/services.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="49" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventSubscriber/FollowerCreatedSubscriber.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="12" column="40" lean-forward="true" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/var/log/dev.log">
       <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="600">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Repository/NotificationRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Command/CreateCompetitionsCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="46" column="32" selection-start-line="46" selection-start-column="32" selection-end-line="46" selection-end-column="32" />
+          <folding>
+            <element signature="e#116#143#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Command/SendPushNotificationsCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+          <folding>
+            <element signature="e#117#145#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PushNotification/PushNotificationService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="41" column="33" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/17ebe6c2-0417-4ccd-a8a2-58b295ec28d5/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="37" column="27" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/CommandController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="46" column="1" lean-forward="true" selection-start-line="46" selection-start-column="1" selection-end-line="46" selection-end-column="1" />
+        <state relative-caret-position="1200">
+          <caret line="85" column="52" lean-forward="true" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="52" />
           <folding>
             <element signature="e#120#185#0#PHP" expanded="true" />
           </folding>
@@ -1017,6 +941,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="28" column="33" lean-forward="true" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventSubscriber/CompetitionCreatedSubscriber.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Listener/EntityListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="80" column="34" lean-forward="true" selection-start-line="80" selection-start-column="34" selection-end-line="80" selection-end-column="34" />
+          <folding>
+            <element signature="e#118#145#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

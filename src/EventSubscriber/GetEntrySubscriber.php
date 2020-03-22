@@ -38,6 +38,8 @@ class GetEntrySubscriber implements EventSubscriberInterface
 
     public function getEntry(GetResponseForControllerResultEvent $event)
     {
+        // Unused logic
+        return;
         $entry = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 

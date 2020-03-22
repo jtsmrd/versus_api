@@ -39,6 +39,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\FollowerRepository")
+ * @ORM\EntityListeners({"App\Listener\EntityListener"})
  */
 class Follower implements UserCreatedEntityInterface, CreateDateEntityInterface
 {

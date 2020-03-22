@@ -19,32 +19,14 @@ class NotificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Notification::class);
     }
 
-    // /**
-    //  * @return Notification[] Returns an array of Notification objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getUnsentNotifications()
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('n.pushDate is NULL')
+            ->andWhere('n.apnsToken is not NULL')
+            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Notification
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

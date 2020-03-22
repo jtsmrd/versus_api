@@ -44,4 +44,56 @@ class CommandController extends AbstractController
         // return new Response(""), if you used NullOutput()
         return new Response($content);
     }
+
+    /**
+     * @Route("/processCompletedCompetitions", name="process-completed-competitions")
+     * @param KernelInterface $kernel
+     * @return Response
+     * @throws \Exception
+     */
+    public function executeProcessCompletedCompetitionsCommand(KernelInterface $kernel)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'app:processCompletedCompetitions'
+        ]);
+
+        // You can use NullOutput() if you don't need the output
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        // return the output, don't use if you used NullOutput()
+        $content = $output->fetch();
+
+        // return new Response(""), if you used NullOutput()
+        return new Response($content);
+    }
+
+    /**
+     * @Route("/sendPushNotifications", name="send-push-notifications")
+     * @param KernelInterface $kernel
+     * @return Response
+     * @throws \Exception
+     */
+    public function executeSendPushNotificationsCommand(KernelInterface $kernel)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'app:sendPushNotifications'
+        ]);
+
+        // You can use NullOutput() if you don't need the output
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        // return the output, don't use if you used NullOutput()
+        $content = $output->fetch();
+
+        // return new Response(""), if you used NullOutput()
+        return new Response($content);
+    }
 }

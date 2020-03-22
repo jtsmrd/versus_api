@@ -10,7 +10,9 @@ namespace App\Command;
 
 use App\Entity\Competition;
 use App\Entity\Entry;
+use App\Entity\Notification;
 use App\Repository\EntryRepository;
+use App\Repository\NotificationTypeRepository;
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -77,17 +79,13 @@ class CreateCompetitionsCommand extends Command
 
             if (!$entry) {
                 $unprocessedEntriesExist = false;
-                $this->logger->debug('Entry is null');
                 continue;
             }
-
-            $this->logger->debug('Entry id: ' . $entry->getId());
 
             $match = $this->getEntryMatch($entry);
 
             if (!$match) {
                 $this->processedIds->add($entry->getId());
-                $this->logger->debug('Match is null');
                 continue;
             }
 
