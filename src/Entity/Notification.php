@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "normalization_context"={
  *                  "groups"={"user-notifications"}
  *              }
- *          }
+ *          },
+ *          "delete"
  *      },
  *     subresourceOperations={
  *          "api_users_notifications_get_subresource"={
